@@ -24,3 +24,127 @@ recomendable no tener mas de 2 constructores porque se sobrecarga el código
 que hacen los controllers dentro del código? 
 Reciben la solicitud del usuario y seleccionan el actionmethod de acuerdo a la request solicitada (routeo)
 
+
+ ¿Cuál de las siguientes afirmaciones sobre Entity Framework es correcta?
+Migrations en Entity Framework se utilizan para aplicar cambios en el esquema de la base de datos sin perder datos existentes.
+
+¿Cuales de las siguientes opciones son atributos que se utilizan para definir que action method (método perteneciente a un Controller) se va a invocar a partir de la request recibida por la API.?
+[HttpPut] [HttpPost] [Route] [HttpGet] [HttpDelete] [HttpPatch]
+
+
+Usted se encuentra trabajando en una empresa de desarrollo de software y se le asigna la tarea de hacer una review al PR de un compañero.
+
+}
+
+[HttpPut ]
+public IActionResult CreateClient( [FromRoute] ClientPostDto dto
+
+if (User.IsInRole("Client"))
+{
+var client = new Client()
+{
+Email = dto.Email,
+LastName = dto.LastName,
+Name = dto.Name,
+Password = dto.Password,
+UserName = dto.UserName,
+Role = "Client"
+};
+Client id = _userService.CreateUser(client);
+return 0k(id);
+}
+return Forbid();
+
+}
+1-El httpverb correspondiente es un post y no un put
+2-El dto deberia venir por el body con un [FromBody]
+3-El role cliente no debería poder crear otro cliente, tendría que chequearse un rol admin o superior.
+4-No debería retornar el objeto entero sino solo el id del elemento creado o nada debido a que hay información sensible en dicho objeto
+
+
+El siguiente código hace referencia a un contexto en una aplicación de Ventas, donde se manejan las entidades Pedidos, Clientes, Productos ( asumir que las entidades ya están creadas ) con el enfoque codefirst. Quisiera representar la relación entre pedidos y productos. ¿Qué acción / acciones debería agregar, teniendo en cuenta la acción y el código propuesto para cada acción?
+
+public class VentasContext : DbContext
+{
+public DbSet<Cliente> Clientes { get; set; }
+public DbSet<Pedido> Pedidos { get; set; }
+public DbSet<Producto> Productos { get; set; }
+
+public VentasContext(DbContextOptions<VentasContext> options)
+: base(options)
+{
+}
+protected override void OnModelCreating(ModelBuilder
+mode{Builder)
+modelBuilder.Entity<Cliente>()
+.HasMany(c => c.Pedidos)
+.WithOne(p => p.Cliente)
+.HasForeignKey(p => p.ClienteId);
+}
+}
+
+/* ¿Qué acción(es) debería agregar aquí para representar
+la relación muchos a muchos entre Pedidos y Productos? */
+
+modelBuilder.Entity<Pedido>()
+.HasMany(p => p.Productos)
+.WithMany(p => p.Pedidos)
+.UsingEntity( i => i )
+.ToTable("PedidoProducto")
+Definir relación muchos a muchos entre Pedidos y Productos con una tabla de unión personalizada llamada PedidoProducto
+
+
+Tenés una lista de ventas donde cada una tiene información sobre el Id, Producto, Cantidad y Precio. Necesitas encontrar todos los productos que se han vendido por más de $1000 en total. La lista de ventas se define como:  
+
+public class Venta
+{
+
+public int Id { get; set; }
+public string Producto { get; set; }
+public int Cantidad { get; set; }
+public decimal Precio { get; set; }
+
+List<Venta> ventas = new List<Venta>
+
+new Venta { Id = 1, Producto = "Laptop", Cantidad = 5, Precio = 300 },
+new Venta { Id = 2, Producto = "Monitor", Cantidad = 2, Precio = 150 },
+new Venta { Id = 3, Producto = "Teclado", Cantidad = 10, Precio = 30 },
+new Venta { Id = 4, Producto = "Mouse", Cantidad = 15, Precio = 20 },
+new Venta { Id = 5, Producto = "Laptop", Cantidad = 3, Precio = 300 },
+new Venta { Id = 6, Producto = "Monitor", Cantidad = 3, Precio = 150 }
+
+};
+
+var productos = ventas.GroupBy(v => v.Producto).Where(g => g.Sum(v => v.Cantidad * v.Precio) > 1000).Select(g => g.Key);
+
+Escriba una sentencia con LINQ que filtre los productos con un precio entre 20 y 30, ordenarlos por precio descendente. Elegir la opción con la sentencia de LINQ que falta. 
+
+public class Producto
+{
+
+public string Nombre { get; set; }
+public decimal Precio { get; set; }
+
+public class ProductoTest
+{
+
+List<Producto> productos = new List<Producto>
+
+new Producto { Nombre = "Producto A", Precio = 25.99m },
+new Producto { Nombre = "Producto B", Precio = 15.50m },
+new Producto { Nombre = "Producto C", Precio = 30.75m },
+new Producto { Nombre = "Producto D", Precio = 20.00m },
+new Producto { Nombre = "Producto E", Precio = 22.40m }
+
+};
+
+public List<Producto> FiltrarProductosyOrdenarPorPrecio()
+{
+
+// La sentencia de LINQ va acá
+
+}
+
+}
+
+productos.Where(p => p.Precio >= 20 && p.Precio <= 30).OrderByDescending(p => p.Precio).ToList();
